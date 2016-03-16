@@ -1,4 +1,3 @@
-angular
-    .module('CS6310', [
-        'ngMaterial'
-    ]);
+angular.module('CS6310', [
+    'ngMaterial'
+]);
