@@ -1,0 +1,15 @@
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+     - "5000:5000"
+    environment:
+     - DATABASE_URL postgres://cs6310:cs6310@db:5432/cs6310
+    command: uwsgi --http 0.0.0.0:5000 --module api --callable app
+
+  db:
+    image: postgres
+    environment:
+     - POSTGRES_USER cs6310
+     - POSTGRES_PASSWORD cs6310
