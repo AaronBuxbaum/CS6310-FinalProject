@@ -7,9 +7,20 @@ services:
     environment:
      - DATABASE_URL postgres://cs6310:cs6310@db:5432/cs6310
     command: uwsgi --http 0.0.0.0:5000 --module api --callable app
+    links:
+     - db
 
   db:
     image: postgres
     environment:
      - POSTGRES_USER cs6310
      - POSTGRES_PASSWORD cs6310
+
+  nginx:
+    build:
+     context: .
+     dockerfile: Dockerfile.nginx
+    ports:
+     - "80:80"
+    links:
+     - web
