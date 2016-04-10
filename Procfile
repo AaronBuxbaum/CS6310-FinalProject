@@ -1,1 +1,1 @@
-web: uwsgi bin/start-nginx heroku_start.sh
+web: bin/start-nginx heroku_start.sh
