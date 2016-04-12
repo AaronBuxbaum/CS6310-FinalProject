@@ -5,6 +5,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var templateCache = require('gulp-angular-templatecache');
 var del = require('del');
 var karma = require('karma');
+var runSequence = require('run-sequence');
 
 /*
     Data
@@ -19,7 +20,8 @@ var vendorsJS = [
   'node_modules/angular/angular.js',
   'node_modules/angular-animate/angular-animate.js',
   'node_modules/angular-aria/angular-aria.js',
-  'node_modules/angular-material/angular-material.js'
+  'node_modules/angular-material/angular-material.js',
+  'node_modules/@angular/router/angular1/angular_1_router.js'
 ];
 var vendorsCSS = [
   'node_modules/angular-material/angular-material.css'
@@ -94,7 +96,7 @@ gulp.task('copy:index', function() {
 gulp.task('server', function() {
   return gulp.src(BUILD_DIR)
     .pipe(webserver({
-      livereload: true,
+      livereload: false,
       open: true
     }));
 });
@@ -107,4 +109,6 @@ gulp.task('watch', function() {
   gulp.watch('src/**', ['build']);
 });
 
-gulp.task('default', ['clean', 'watch', 'build', 'server']);
+gulp.task('default', function(callback) {
+  runSequence('clean', 'build', 'server', callback);
+});

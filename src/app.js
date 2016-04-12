@@ -1,3 +1,6 @@
 angular.module('CS6310', [
-    'ngMaterial'
-]);
+  'ngMaterial',
+  'ngComponentRouter'
+])
+
+  .value('$routerRootComponent', 'main');

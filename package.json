@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/AaronBuxbaum/CS6310-FinalProject#readme",
   "dependencies": {
+    "@angular/router": "^0.2.0",
     "angular": "^1.5.0",
     "angular-animate": "^1.5.0",
     "angular-aria": "^1.5.0",
@@ -33,6 +34,7 @@
     "karma": "^0.13.22",
     "karma-jasmine": "^0.3.8",
     "karma-phantomjs-launcher": "^1.0.0",
-    "phantomjs-prebuilt": "^2.1.7"
+    "phantomjs-prebuilt": "^2.1.7",
+    "run-sequence": "^1.1.5"
   }
 }
