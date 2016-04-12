@@ -2,8 +2,13 @@
 
 [![Build Status](https://travis-ci.org/AaronBuxbaum/CS6310-FinalProject.svg?branch=master)](https://travis-ci.org/AaronBuxbaum/CS6310-FinalProject)
 
-Run: `gulp`
+To build:
+  1. Install NodeJS
+  2. Clone this repository
+  3. `cd` into repository
+  4. `npm install`
 
-Build: `gulp build`
-
-Test: `gulp test`
+Other commands:
+  - Run: `gulp`
+  - Build: `gulp build`
+  - Test: `gulp test`
