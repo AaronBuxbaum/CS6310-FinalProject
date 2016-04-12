@@ -21,7 +21,8 @@ var vendorsJS = [
   'node_modules/angular-animate/angular-animate.js',
   'node_modules/angular-aria/angular-aria.js',
   'node_modules/angular-material/angular-material.js',
-  'node_modules/@angular/router/angular1/angular_1_router.js'
+  'node_modules/@angular/router/angular1/angular_1_router.js',
+  'node_modules/lodash/lodash.js'
 ];
 var vendorsCSS = [
   'node_modules/angular-material/angular-material.css'
@@ -57,6 +58,11 @@ gulp.task('build:app:js', function() {
 });
 
 gulp.task('build:app:css', function() {
+  return gulp.src('src/**/*.css')
+    .pipe(sourcemaps.init())
+    .pipe(concat('app.css'))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest(BUILD_DIR));
 });
 
 gulp.task('build:app:html', function() {
