@@ -1,45 +1,19 @@
 <md-content class="registration md-padding autocomplete" layout="column">
     <md-contact-chips ng-model="$ctrl.selectedClasses" filter-selected="true" md-contacts="$ctrl.querySearch($query)" md-contact-name="title"
-    md-contact-image="image" md-contact-email="number" md-require-match="true" md-highlight-flags="i" placeholder="Select a class..."
-    secondary-placeholder="Select more classes...">
+        md-contact-image="image" md-contact-email="number" md-require-match="true" md-highlight-flags="i" placeholder="Select a class..."
+        secondary-placeholder="Select more classes...">
     </md-contact-chips>
 
     <md-list>
         <md-subheader class="md-no-sticky">Recommended Classes</md-subheader>
-        <md-list-item class="md-2-line contact-item" ng-repeat="class in $ctrl.allClasses | filter: {recommended: true}" ng-if="$ctrl.selectedClasses.indexOf(class) < 0">
-            <img ng-src="{{class.image}}" class="md-avatar" alt="{{class.title}}" />
-            <div class="md-list-item-text compact">
-                <h3>{{class.title}}</h3>
-                <p>{{$ctrl.getFullClassName(class)}}</p>
-            </div>
-        </md-list-item>
-
-        <md-list-item class="md-2-line contact-item selected" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: true}">
-            <img ng-src="{{class.image}}" class="md-avatar" alt="{{class.title}}" />
-            <div class="md-list-item-text compact">
-                <h3>{{class.title}}</h3>
-                <p>{{$ctrl.getFullClassName(class)}}</p>
-            </div>
-        </md-list-item>
+        <class-item ng-model="class" ng-repeat="class in $ctrl.allClasses | filter: {recommended: true}" ng-if="$ctrl.selectedClasses.indexOf(class) < 0"></class-item>
+        <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: true}" class="selected"></class-item>
     </md-list>
 
     <md-list>
         <md-subheader class="md-no-sticky">All Classes</md-subheader>
-        <md-list-item class="md-2-line contact-item" ng-repeat="class in $ctrl.allClasses | filter: {recommended: '!'}" ng-if="$ctrl.selectedClasses.indexOf(class) < 0">
-            <img ng-src="{{class.image}}" class="md-avatar" alt="{{class.title}}" />
-            <div class="md-list-item-text compact">
-                <h3>{{class.title}}</h3>
-                <p>{{$ctrl.getFullClassName(class)}}</p>
-            </div>
-        </md-list-item>
-
-        <md-list-item class="md-2-line contact-item selected" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: '!'}">
-            <img ng-src="{{class.image}}" class="md-avatar" alt="{{class.title}}" />
-            <div class="md-list-item-text compact">
-                <h3>{{class.title}}</h3>
-                <p>{{$ctrl.getFullClassName(class)}}</p>
-            </div>
-        </md-list-item>
+        <class-item ng-model="class" ng-repeat="class in $ctrl.allClasses | filter: {recommended: '!'}" ng-if="$ctrl.selectedClasses.indexOf(class) < 0"></class-item>
+        <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: '!'}" class="selected"></class-item>
     </md-list>
 
     <md-button ng-click="$ctrl.submitChanges()" class="md-raised md-primary">Submit</md-button>

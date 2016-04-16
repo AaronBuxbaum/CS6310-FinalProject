@@ -7,10 +7,6 @@
   padding-bottom: 8px; }
 .registration .contact-item {
   box-sizing: border-box; }
-.registration .contact-item.selected {
-  opacity: 0.5; }
-.registration .contact-item.selected h3 {
-  opacity: 0.5; }
 .registration .contact-item .md-list-item-text {
   width: 0;
   padding: 14px 0; }
@@ -29,3 +25,5 @@
   margin-bottom: 10px; }
 .registration .md-chips {
   padding: 5px 0 8px; }
+.registration .selected * {
+  opacity: 0.5; }

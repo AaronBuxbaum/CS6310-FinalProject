@@ -77,8 +77,4 @@ angular.module('CS6310').controller('RegistrationCtrl', function($scope, $filter
   ctrl.querySearch = function(query) {
     return $filter('filter')(ctrl.allClasses, query);
   };
-
-  ctrl.getFullClassName = function(obj) {
-    return obj.subject + ' ' + obj.number;
-  };
 });
