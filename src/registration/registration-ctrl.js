@@ -1,4 +1,4 @@
-angular.module('CS6310').controller('RegistrationCtrl', function($scope, $filter) {
+angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filter) {
   var ctrl = this;
 
   //EXAMPLE DATA
@@ -48,7 +48,8 @@ angular.module('CS6310').controller('RegistrationCtrl', function($scope, $filter
     {
       subject: 'CS',
       number: 6400,
-      title: 'Database Systems Concepts and Design'
+      title: 'Database Systems Concepts and Design',
+      recommended: true
     },
     {
       subject: 'CS',
@@ -58,7 +59,8 @@ angular.module('CS6310').controller('RegistrationCtrl', function($scope, $filter
     {
       subject: 'CSE',
       number: 8803005,
-      title: 'Special Topics: Big Data for Health Informatics'
+      title: 'Special Topics: Big Data for Health Informatics',
+      recommended: true
     },
     {
       subject: 'CS',
@@ -66,15 +68,18 @@ angular.module('CS6310').controller('RegistrationCtrl', function($scope, $filter
       title: 'Artificial Intelligence'
     }
   ];
-  ctrl.selectedClasses = _.sampleSize(ctrl.allClasses, 2);
-  ctrl.allClasses.map(function(item, i) {
+  ctrl.selectedClasses = _.sampleSize(ctrl.allClasses, 4);
+  ctrl.allClasses.map(function (item, i) {
     item.image = '//loremflickr.com/50/50?random=' + i;
     return item;
   });
 
-
   //Actual Functionality
-  ctrl.querySearch = function(query) {
+  ctrl.querySearch = function (query) {
     return $filter('filter')(ctrl.allClasses, query);
+  };
+
+  ctrl.submitChanges = function () {
+    console.log('TODO');
   };
 });
