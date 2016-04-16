@@ -2,7 +2,7 @@
 
 # Build local
 npm install
-npm install -g gulp
+npm install gulp
 node node_modules/gulp/bin/gulp build
 
 touch /tmp/app-initialized
