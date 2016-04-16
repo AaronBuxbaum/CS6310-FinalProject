@@ -7,6 +7,7 @@ To build:
   2. Clone this repository
   3. `cd` into repository
   4. `npm install`
+  5. `npm install -g gulp`
 
 Other commands:
   - Run: `gulp`
