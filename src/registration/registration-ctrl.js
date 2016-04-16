@@ -21,12 +21,14 @@ angular.module('CS6310').controller('RegistrationCtrl', function($scope, $filter
     {
       subject: 'CS',
       number: 6250,
-      title: 'Computer Networks'
+      title: 'Computer Networks',
+      recommended: true
     },
     {
       subject: 'CSE',
       number: 6220,
-      title: 'Intro to High-Performance Computing'
+      title: 'Intro to High-Performance Computing',
+      recommended: true
     },
     {
       subject: 'CS',
