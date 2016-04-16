@@ -6,7 +6,7 @@
 
     <md-list>
         <md-subheader class="md-no-sticky">Recommended Classes</md-subheader>
-        <md-list-item class="md-2-line contact-item" ng-repeat="class in $ctrl.allClasses | {recommended: true}" ng-if="$ctrl.selectedClasses.indexOf(class) < 0">
+        <md-list-item class="md-2-line contact-item" ng-repeat="class in $ctrl.allClasses | filter: {recommended: true}" ng-if="$ctrl.selectedClasses.indexOf(class) < 0">
             <img ng-src="{{class.image}}" class="md-avatar" alt="{{class.title}}" />
             <div class="md-list-item-text compact">
                 <h3>{{class.title}}</h3>
@@ -14,7 +14,7 @@
             </div>
         </md-list-item>
 
-        <md-list-item class="md-2-line contact-item selected" ng-repeat="class in $ctrl.selectedClasses | {recommended: true}">
+        <md-list-item class="md-2-line contact-item selected" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: true}">
             <img ng-src="{{class.image}}" class="md-avatar" alt="{{class.title}}" />
             <div class="md-list-item-text compact">
                 <h3>{{class.title}}</h3>
@@ -25,7 +25,7 @@
 
     <md-list>
         <md-subheader class="md-no-sticky">All Classes</md-subheader>
-        <md-list-item class="md-2-line contact-item" ng-repeat="class in $ctrl.allClasses" ng-if="$ctrl.selectedClasses.indexOf(class) < 0">
+        <md-list-item class="md-2-line contact-item" ng-repeat="class in $ctrl.allClasses | filter: {recommended: '!'}" ng-if="$ctrl.selectedClasses.indexOf(class) < 0">
             <img ng-src="{{class.image}}" class="md-avatar" alt="{{class.title}}" />
             <div class="md-list-item-text compact">
                 <h3>{{class.title}}</h3>
@@ -33,7 +33,7 @@
             </div>
         </md-list-item>
 
-        <md-list-item class="md-2-line contact-item selected" ng-repeat="class in $ctrl.selectedClasses">
+        <md-list-item class="md-2-line contact-item selected" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: '!'}">
             <img ng-src="{{class.image}}" class="md-avatar" alt="{{class.title}}" />
             <div class="md-list-item-text compact">
                 <h3>{{class.title}}</h3>
@@ -41,6 +41,6 @@
             </div>
         </md-list-item>
     </md-list>
-    
-    <md-button ng-click="$ctrl.submitChanges()">Submit</md-button>
+
+    <md-button ng-click="$ctrl.submitChanges()" class="md-raised md-primary">Submit</md-button>
 </md-content>
