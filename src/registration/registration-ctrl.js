@@ -79,6 +79,14 @@ angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filte
     return $filter('filter')(ctrl.allClasses, query);
   };
 
+  ctrl.selectClass = function (item) {
+    return ctrl.selectedClasses.push(item);
+  };
+
+  ctrl.isSelected = function (item) {
+    return ctrl.selectedClasses.indexOf(item) < 0;
+  };
+
   ctrl.submitChanges = function () {
     console.log('TODO');
   };

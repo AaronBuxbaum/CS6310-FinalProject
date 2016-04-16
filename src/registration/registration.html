@@ -6,13 +6,16 @@
 
     <md-list>
         <md-subheader class="md-no-sticky">Recommended Classes</md-subheader>
-        <class-item ng-model="class" ng-repeat="class in $ctrl.allClasses | filter: {recommended: true}" ng-if="$ctrl.selectedClasses.indexOf(class) < 0"></class-item>
+        <class-item ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses | filter: {recommended: true}"
+            ng-if="!$ctrl.isSelected(class)">
+        </class-item>
         <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: true}" class="selected"></class-item>
     </md-list>
 
     <md-list>
         <md-subheader class="md-no-sticky">All Classes</md-subheader>
-        <class-item ng-model="class" ng-repeat="class in $ctrl.allClasses | filter: {recommended: '!'}" ng-if="$ctrl.selectedClasses.indexOf(class) < 0"></class-item>
+        <class-item ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses | filter: {recommended: '!'}"
+            ng-if="!$ctrl.isSelected(class)"></class-item>
         <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: '!'}" class="selected"></class-item>
     </md-list>
 
