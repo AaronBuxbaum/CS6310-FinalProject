@@ -9,6 +9,6 @@ To build:
   4. `npm install`
 
 Other commands:
-  - Run: `gulp`
-  - Build: `gulp build`
-  - Test: `gulp test`
+  - Run: `./node_modules/gulp/bin/gulp.js`
+  - Build: `./node_modules/gulp/bin/gulp.js build`
+  - Test: `./node_modules/gulp/bin/gulp.js test`
