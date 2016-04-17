@@ -1,7 +1,7 @@
-angular.module('CS6310').controller('FooterCtrl', function () {
+angular.module('CS6310').controller('FooterCtrl', function ($rootRouter) {
     var ctrl = this;
 
     ctrl.aboutUs = function () {
-        console.log('TODO');
+        $rootRouter.navigate('aboutUs');
     };
 });
