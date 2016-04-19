@@ -1,0 +1,21 @@
+<md-content md-padding layout="column">
+    <md-card style="height: 200px;" ng-repeat="developer in $ctrl.developers">
+        <md-card-title>
+            <md-card-title-text>
+                <span class="md-headline">{{::developer.name}}</span>
+                <span class="md-subhead">{{::developer.title}}</span>
+            </md-card-title-text>
+            <md-card-title-media style="height: 100px;">
+                <img style="height: inherit; width: inherit;" ng-src="{{::developer.image}}" />
+            </md-card-title-media>
+        </md-card-title>
+        <md-card-content style="margin-right: 200px; margin-top: 50px; padding-bottom: 0">
+            {{::developer.text}}
+        </md-card-content>
+        <md-card-actions layout="row" layout-align="end center">
+            <md-button ng-href="{{::action.link}}" ng-repeat="action in ::developer.actions">
+                {{::action.name}}
+            </md-button>
+        </md-card-actions>
+    </md-card>
+</md-content>
