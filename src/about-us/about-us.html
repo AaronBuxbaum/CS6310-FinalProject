@@ -1,21 +1,19 @@
-<md-content md-padding layout="column">
-    <md-card style="height: 200px;" ng-repeat="developer in $ctrl.developers">
-        <md-card-title>
-            <md-card-title-text>
-                <span class="md-headline">{{::developer.name}}</span>
-                <span class="md-subhead">{{::developer.title}}</span>
-            </md-card-title-text>
-            <md-card-title-media style="height: 100px;">
-                <img style="height: inherit; width: inherit;" ng-src="{{::developer.image}}" />
-            </md-card-title-media>
-        </md-card-title>
-        <md-card-content style="margin-right: 200px; margin-top: 50px; padding-bottom: 0">
-            {{::developer.text}}
-        </md-card-content>
-        <md-card-actions layout="row" layout-align="end center">
-            <md-button ng-href="{{::action.link}}" ng-repeat="action in ::developer.actions">
-                {{::action.name}}
-            </md-button>
-        </md-card-actions>
-    </md-card>
+<md-content md-padding>
+    <md-grid-list md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="6" md-row-height-gt-md="1:1" md-row-height="5:3" md-gutter="8px"
+        md-gutter-gt-sm="4px" style="margin: 8px;">
+        <md-grid-tile ng-repeat="developer in ::$ctrl.developers" ng-style="{'background-image': 'url(' + developer.image + ')'}"
+            style="background-size: cover;" ng-mouseover="developer.hovered = true" ng-mouseleave="developer.hovered = false">
+            <span ng-if="developer.hovered" style="color: white; position: absolute; top: 20px; left: 20px;">
+                {{::developer.text}}
+            </span>
+            <a ng-href="{{::developer.link}}" target="_blank">
+                <md-grid-tile-footer>
+                    <h3>{{::developer.name}}</h3>
+                    <md-button ng-if="::developer.link" style="position: absolute; top: 0; right: 0;">
+                        <ng-md-icon icon="linkedin-box" style="fill: white"></ng-md-icon>
+                    </md-button>
+                </md-grid-tile-footer>
+            </a>
+        </md-grid-tile>
+    </md-grid-list>
 </md-content>

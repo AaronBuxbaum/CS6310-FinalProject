@@ -10,7 +10,7 @@ angular.module('CS6310').component('main', {
     {
       path: '/student/:id',
       name: 'Student',
-      component: 'student'
+      component: 'registration'
     },
     {
       path: '/aboutUs',
