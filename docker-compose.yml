@@ -12,6 +12,8 @@ services:
 
   db:
     image: postgres
+    ports:
+     - "55432:5432"
     environment:
      - POSTGRES_USER cs6310
      - POSTGRES_PASSWORD cs6310

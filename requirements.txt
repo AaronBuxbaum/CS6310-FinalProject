@@ -1,2 +1,5 @@
 flask
 uwsgi
+psycopg2
+sqlalchemy
+marshmallow
