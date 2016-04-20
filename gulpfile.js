@@ -101,13 +101,6 @@ gulp.task('copy:index', function () {
 /*
     Misc tasks
 */
-gulp.task('server', function () {
-  return gulp.src(BUILD_DIR)
-    .pipe(webserver({
-      livereload: false,
-      open: true
-    }));
-});
 
 gulp.task('clean', function () {
   return del([BUILD_DIR]);
@@ -117,6 +110,10 @@ gulp.task('watch', function () {
   gulp.watch('src/**', ['build']);
 });
 
-gulp.task('default', function (callback) {
-  runSequence('clean', 'build', 'server', callback);
+gulp.task('default', function () {
+  return gulp.src('src')
+    .pipe(webserver({
+      livereload: true,
+      open: true
+    }));
 });
