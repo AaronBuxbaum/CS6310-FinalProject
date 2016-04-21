@@ -1,1 +1,1 @@
-web: bin/start-nginx bash /app/heroku_start.sh
+web: uwsgi --http 0.0.0.0:$PORT --module api --callable app

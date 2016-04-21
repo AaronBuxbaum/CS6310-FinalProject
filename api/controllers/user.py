@@ -5,7 +5,7 @@ from flask import Blueprint, jsonify, request, session
 from api.models import db_session, User
 from api.schemas import UserSchema
 
-user_bp = Blueprint('user', __name__, url_prefix='/user')
+user_bp = Blueprint('user', __name__, url_prefix='/api/user')
 
 # TODO: Testing only, should connect to external user authentication system
 @user_bp.route('/', methods=['POST'])
