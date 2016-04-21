@@ -5,8 +5,8 @@ services:
     ports:
      - "5000:5000"
     environment:
-     - DATABASE_URL postgres://cs6310:cs6310@db:5432/cs6310
-    command: uwsgi --http 0.0.0.0:5000 --module api --callable app
+      DATABASE_URL: postgres://cs6310:cs6310@db:5432/cs6310
+    command: bash docker_start.sh
     links:
      - db
 
@@ -15,8 +15,8 @@ services:
     ports:
      - "55432:5432"
     environment:
-     - POSTGRES_USER cs6310
-     - POSTGRES_PASSWORD cs6310
+      POSTGRES_USER: cs6310
+      POSTGRES_PASSWORD: cs6310
 
   nginx:
     build:

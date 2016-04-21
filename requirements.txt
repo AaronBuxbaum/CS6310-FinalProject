@@ -3,3 +3,4 @@ uwsgi
 psycopg2
 sqlalchemy
 marshmallow
+arrow
