@@ -59,7 +59,7 @@ for ia in db_session.query(InstructorPool).all():
         'instructor_role': ia.instructor_role
     })
 
-with open('optimizer/test_data.json', 'w') as testfile:
+with open('optimizer/test_data_big.json', 'w') as testfile:
     testfile.write(json.dumps({
         'students': students,
         'courses': courses,

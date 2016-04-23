@@ -102,6 +102,14 @@ class Solver(object):
 
             print(schedule)
 
+    def get_student_assignments(self):
+        assignments = []
+        for (student, course, semester) in self.solution_matrix.keys():
+            if self.solution_matrix[student, course, semester].x == 1:
+                assignments.append(dict(student=student, course=course, semester=semester))
+
+        return assignments
+
     def is_course_offered(self, course_id, semester_id):
         c = self.all_data['courses'][str(course_id)]
         s = self.all_data['semesters'][str(semester_id)]['semester_name'].lower()
