@@ -1,0 +1,29 @@
+.registration md-content.autocomplete {
+  min-height: 250px; }
+.registration md-content.autocomplete input {
+  min-width: 400px; }
+.registration .md-item-text.compact {
+  padding-top: 8px;
+  padding-bottom: 8px; }
+.registration .contact-item {
+  box-sizing: border-box; }
+.registration .contact-item .md-list-item-text {
+  width: 0;
+  padding: 14px 0; }
+.registration .contact-item .md-list-item-text h3 {
+  margin: 0 !important;
+  padding: 0;
+  line-height: 1.2em !important; }
+.registration .contact-item .md-list-item-text h3, .registration .contact-item .md-list-item-text p {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden; }
+.registration .contact-item {
+  float: left;
+  width: 33%; }
+.registration md-contact-chips {
+  margin-bottom: 10px; }
+.registration .md-chips {
+  padding: 5px 0 8px; }
+.registration .selected * {
+  opacity: 0.5; }
