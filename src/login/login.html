@@ -1,2 +1,24 @@
-<!-- Just for debugging, putting this here for now -->
-<registration></registration>
+<md-content layout="column" layout-padding layout-align="center center">
+  <md-subheader class="md-primary">Log In</md-subheader>
+
+  <form ng-submit="$ctrl.logIn()" layout="column">
+    <md-input-container>
+      <label>Username</label>
+      <md-icon class="md-primary">
+        <ng-md-icon icon="account_circle"></ng-md-icon>
+      </md-icon>
+      <input ng-model="$ctrl.username" type="text">
+    </md-input-container>
+
+    <md-input-container>
+      <label>Password</label>
+      <md-icon class="md-primary">
+        <ng-md-icon icon="vpn_key"></ng-md-icon>
+      </md-icon>
+      <input ng-model="$ctrl.password" type="password">
+    </md-input-container>
+
+    <md-button type="submit" class="md-raised md-primary">Log In</md-button>
+  </form>
+
+</md-content>
