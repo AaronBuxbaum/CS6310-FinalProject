@@ -1,5 +1,6 @@
 angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filter, UserService, CourseService, DemandService) {
   var ctrl = this;
+  ctrl.selectedClasses = [];
 
   if (!UserService.loggedIn) {
     ctrl.$router.navigate(['Log In']);
@@ -11,8 +12,11 @@ angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filte
       return item;
     });
     DemandService.getDemand().then(function (response) {
-      var id = response.data.demand[0].course.id;
-      ctrl.selectedClasses = [_.find(ctrl.allClasses, { id: id })];
+      response.data.demand.map(function (item) {
+        return item.course.id;
+      }).forEach(function (id) {
+        ctrl.selectedClasses.push(_.find(ctrl.allClasses, { id: id }));
+      });
     });
   });
 
