@@ -119,7 +119,7 @@ class Solver(object):
 
         return assignments
 
-    def get_instructor_assignment(self):
+    def get_instructor_assignments(self):
         instructors_list = {(c, s): [] for (i, c, s) in self.instructor_availability.keys()}
         for (i, c, s) in self.instructor_availability.keys():
             instructors_list[c, s].append(i)
