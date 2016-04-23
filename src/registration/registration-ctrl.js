@@ -3,7 +3,9 @@ angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filte
   ctrl.selectedClasses = [];
 
   ctrl.$routerOnActivate = function () {
-    return UserService.loggedIn.role === 'student';
+    return UserService.getUser().then(function (user) {
+      return user.data.role === 'student';
+    });
   };
 
   CourseService.getAllClasses().then(function (response) {
