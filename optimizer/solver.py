@@ -1,5 +1,6 @@
 import sys
 import json
+import random
 from collections import defaultdict
 from gurobipy import Model, LinExpr, GRB, GurobiError
 
@@ -21,12 +22,16 @@ class Solver(object):
         for sd in json_data['student_demand']:
             self.student_demand[sd['student_id'], sd['course_id'], sd['semester_id']] = True
 
+        self.instructor_availability = defaultdict(lambda: False)
+        for ia in json_data['instructor_pool']:
+            self.instructor_availability[ia['instructor_id'], ia['course_id'], ia['semester_id']] = True
+
+        self.instructor_ids = [s['instructor_id'] for s in json_data['instructor_pool']]
 
     def construct_model(self):
         self.m = Model('mip1.log')
 
         # Create model variables
-        max_class_size = self.m.addVar(lb=0.0, ub=GRB.INFINITY, vtype=GRB.INTEGER, name='max_class_size')
         self.solution_matrix = {(st, c, se): self.m.addVar(vtype=GRB.BINARY, name='{}_{}_{}'.format(st, c, se))
                            for st in self.student_ids for c in self.course_ids for se in self.semester_ids}
 
@@ -43,7 +48,7 @@ class Solver(object):
                 if not self.is_course_offered(course, semester):
                     self.m.addConstr(class_size_expr, GRB.EQUAL, 0, 'max_size_{}_{}'.format(course, semester))
                 else:
-                    self.m.addConstr(class_size_expr, GRB.LESS_EQUAL, max_class_size, 'max_size_{}_{}'.format(course, semester))
+                    self.m.addConstr(class_size_expr, GRB.LESS_EQUAL, 300, 'max_size_{}_{}'.format(course, semester))
 
         # Constraint #2: No classes with pre-requisites in first semester
         for student in self.student_ids:
@@ -65,7 +70,6 @@ class Solver(object):
         # Constraint #4: Course demand for student
         for student in self.student_ids:
             for course in self.course_ids:
-
                 if any([self.student_demand[student, course, semester] for semester in self.semester_ids]):
                     demand_expr = LinExpr()
                     for semester in self.semester_ids:
@@ -86,7 +90,12 @@ class Solver(object):
 
         # Create the objective
         objective_expr = LinExpr()
-        objective_expr.add(max_class_size)
+        for student in self.student_ids:
+            for course in self.course_ids:
+                for semester in self.semester_ids:
+                    if self.student_demand[student, course, semester]:
+                        objective_expr.add(1 - self.solution_matrix[student, course, semester])
+
         self.m.setObjective(objective_expr, GRB.MINIMIZE)
 
     def optimize_model(self):
@@ -110,6 +119,25 @@ class Solver(object):
 
         return assignments
 
+    def get_instructor_assignment(self):
+        instructors_list = {(c, s): [] for (i, c, s) in self.instructor_availability.keys()}
+        for (i, c, s) in self.instructor_availability.keys():
+            instructors_list[c, s].append(i)
+
+        student_counts = {(c, s): 0 for (st, c, s) in self.solution_matrix.keys()}
+        for (student, course, semester) in self.solution_matrix.keys():
+            if self.solution_matrix[student, course, semester].x == 1:
+                student_counts[course, semester] += 1
+
+        instructor_assign = []
+        for (c, s) in student_counts.keys():
+            if student_counts[c, s] > 0:
+                if (c, s) in instructors_list.keys():
+                    instructor_assign.append(dict(instructor_id=random.choice(instructors_list[c, s]), course_id=c, semester_id=s))
+
+
+        return instructor_assign
+
     def is_course_offered(self, course_id, semester_id):
         c = self.all_data['courses'][str(course_id)]
         s = self.all_data['semesters'][str(semester_id)]['semester_name'].lower()
@@ -123,3 +151,4 @@ if __name__ == '__main__':
         solver.construct_model()
         print(solver.optimize_model())
         solver.print_debug_matrix()
+        print(solver.get_instructor_assignment())
