@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, g
 from sqlalchemy import desc
 
 from api.utils import requires_authentication
-from api.models import db_session, Course, StudentAssignment, OptimizationRun
+from api.models import db_session, Course, StudentAssignment, OptimizationRun, InstructorAssignment, User
 from api.schemas import ScheduleSchema
 
 schedule_bp = Blueprint('schedule', __name__, url_prefix='/api/schedule')
@@ -26,7 +26,9 @@ def get_user_schedule(user_id=None):
         course_schedule.append({
             'course': c.course,
             'semester': c.semester,
-            'instructors': None
+            'instructors': db_session.query(User).join(InstructorAssignment, User.id == InstructorAssignment.instructor_id)
+                .filter(InstructorAssignment.course_id == c.course.id)
+                .filter(InstructorAssignment.semester_id == c.semester.id).all()
         })
 
     return jsonify(courses=ScheduleSchema().dump(course_schedule, many=True).data)
