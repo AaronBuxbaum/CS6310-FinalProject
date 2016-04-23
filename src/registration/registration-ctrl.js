@@ -6,7 +6,6 @@ angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filte
   }
 
   CourseService.getAllClasses().then(function (response) {
-    console.log(response.data.courses);
     ctrl.allClasses = response.data.courses[0].map(function (item, i) {
       item.image = '//loremflickr.com/50/50?random=' + i;
       return item;
