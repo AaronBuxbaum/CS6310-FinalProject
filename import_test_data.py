@@ -26,6 +26,13 @@ with open('optimizer/resources/small/users_10.csv', 'rU') as user_file:
 
         db_session.add(db_user)
 
+    admin_user = User(first_name='Awesome',
+                      last_name='Administrator',
+                      username='aadmin3',
+                      password_hash=hashlib.sha256('aadmin3'.lower().encode()).hexdigest(),
+                      role='administrator')
+    db_session.add(admin_user)
+
     db_session.commit()
 
 # Create all semesters

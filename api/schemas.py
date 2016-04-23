@@ -24,13 +24,27 @@ class SemesterSchema(Schema):
     start_date = fields.Date(required=True)
     end_date = fields.Date(required=True)
 
+class DemandSchema(Schema):
+    course = fields.Nested(CourseSchema, required=True)
+    semester = fields.Nested(SemesterSchema, required=True)
+
+class AggregateDemandSchema(Schema):
+    course = fields.Nested(CourseSchema, required=True)
+    semester = fields.Nested(SemesterSchema, required=True)
+    demand = fields.Int()
+
 class ScheduleSchema(Schema):
     course = fields.Nested(CourseSchema, required=True)
     semester = fields.Nested(SemesterSchema, required=True)
-    instructors = fields.Nested(UserSchema, required=True, many=True)
+    instructors = fields.Nested(UserSchema, many=True)
+
+class InstructorPoolSchema(Schema):
+    course = fields.Nested(CourseSchema, required=True)
+    semester = fields.Nested(SemesterSchema, required=True)
+    instructor = fields.Nested(UserSchema, required=True)
 
 class ScheduleDetailSchema(Schema):
     course = fields.Nested(CourseSchema, required=True)
     semester = fields.Nested(SemesterSchema, required=True)
-    instructors = fields.Nested(UserSchema, required=True, many=True)
+    instructors = fields.Nested(UserSchema, many=True)
     students = fields.Nested(UserSchema, required=True, many=True)

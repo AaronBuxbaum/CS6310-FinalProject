@@ -11,8 +11,16 @@ flask_app = Flask(__name__, static_folder='../src', static_url_path='')
 flask_app.secret_key = 'notreallythatsecret'
 
 from api.controllers.user import user_bp
+from api.controllers.course import course_bp
+from api.controllers.schedule import schedule_bp
+from api.controllers.demand import demand_bp
+from api.controllers.instructor import instructor_bp
 
 flask_app.register_blueprint(user_bp)
+flask_app.register_blueprint(course_bp)
+flask_app.register_blueprint(schedule_bp)
+flask_app.register_blueprint(demand_bp)
+flask_app.register_blueprint(instructor_bp)
 
 @flask_app.teardown_appcontext
 def cleanup_db_session(exc=None):
