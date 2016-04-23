@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 angular.module('CS6310').controller('AdminCtrl', function ($scope, $filter, UserService, CourseService, DemandService) {
     var ctrl = this;
 
@@ -35,14 +35,4 @@ angular.module('CS6310').controller('AdminCtrl', function ($scope, $filter, User
   ctrl.submitChanges = function () {
     return DemandService.submitDemand(ctrl.selectedClasses);
   };
-=======
-angular.module('CS6310').controller('AdminCtrl', function (UserService) {
-    var ctrl = this;
-
-    ctrl.$routerCanActivate = function () {
-        return UserService.getUser().then(function (user) {
-            return user.data.role === 'administrator';
-        });
-    };
->>>>>>> d8f2ae388585a6dc84d6514ab72d5eb3d84a34a3
 });
