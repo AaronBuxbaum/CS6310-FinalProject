@@ -13,6 +13,11 @@ angular.module('CS6310').component('main', {
       component: 'registration'
     },
     {
+      path: '/admincp/:id',
+      name: 'Admin Control Panel',
+      component: 'admin'
+    },
+    {
       path: '/aboutUs',
       name: 'About Us',
       component: 'aboutUs'

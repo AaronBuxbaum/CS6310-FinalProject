@@ -6,7 +6,8 @@ angular.module('CS6310').controller('HeaderCtrl', function (UserService, $rootRo
     };
 
     ctrl.logOut = function () {
-        UserService.loggedIn = false;
-        $rootRouter.navigate(['Log In']);
+        return UserService.logOut().then(function () {
+            return $rootRouter.navigate(['Log In']);
+        });
     };
 });

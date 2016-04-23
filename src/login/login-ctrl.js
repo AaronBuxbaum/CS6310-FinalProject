@@ -5,7 +5,7 @@ angular.module('CS6310').controller('LoginCtrl', function (UserService) {
     return UserService.logIn(ctrl.username, ctrl.password).then(function (userData) {
       var route = {
         'student': 'Student Registration',
-        'administrator': 'Administrator Panel',
+        'administrator': 'Admin Control Panel',
         'ta': 'Teaching Assistant'
       };
 

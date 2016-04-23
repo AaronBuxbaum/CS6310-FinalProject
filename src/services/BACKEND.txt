@@ -1,0 +1,53 @@
+DEMAND:
+
+DELETE http://192.168.99.100/api/demand/?course_id=1&semester_id=1
+​
+{
+  "semester_id": "1",
+  "course_id": "1"
+}
+​
+GET http://192.168.99.100/api/demand/aggregate
+​
+GET http://192.168.99.100/api/demand/
+
+​
+POST http://192.168.99.100/api/demand/
+​
+{
+  "semester_id": "1",
+  "course_id": "1"
+}
+​
+
+
+???:
+
+
+GET http://192.168.99.100/api/schedule/
+
+
+
+
+
+
+
+INSTRUCTOR:
+
+GET http://192.168.99.100/api/instructor/
+​
+POST http://192.168.99.100/api/instructor/
+​
+{
+  "semester_id": "1",
+  "course_id": "1",
+  "instructor_id": "1"
+}
+
+DELETE http://192.168.99.100/api/instructor/?instructor_id=1&course_id=1&semester_id=1
+​
+{
+  "semester_id": "1",
+  "course_id": "1"
+}
+
