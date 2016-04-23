@@ -1,6 +1,10 @@
-angular.module('CS6310').factory('UserService', function ($http) {
+angular.module('CS6310').factory('UserService', function (API_URL, $http) {
   var svc = {};
-  var url = 'http://192.168.99.104/api/user/';
+  var url = API_URL + 'user/';
+
+  svc.getUser = function () {
+    return $http.get(url);
+  };
 
   svc.logIn = function (username, password) {
     return $http.post(url + 'login', {
@@ -17,7 +21,7 @@ angular.module('CS6310').factory('UserService', function ($http) {
       svc.loggedIn = null;
       return svc.loggedIn;
     });
-  }
+  };
 
   return svc;
 });

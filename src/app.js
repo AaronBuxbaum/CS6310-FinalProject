@@ -5,6 +5,7 @@ angular.module('CS6310', [
 ])
 
   .value('$routerRootComponent', 'main')
+  .value('API_URL', 'http://192.168.99.104/api/')
 
   .config(function ($mdThemingProvider) {
     $mdThemingProvider.theme('default')
