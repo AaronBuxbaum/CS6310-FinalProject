@@ -49,7 +49,7 @@ def get_solver_context():
 
     # Student demand
     student_demand = []
-    for sd in db_session.query(StudentDemand).all():
+    for sd in db_session.query(StudentDemand).filter(StudentDemand.is_current == True).all():
         student_demand.append({
             'student_id': sd.student_id,
             'course_id': sd.course_id,

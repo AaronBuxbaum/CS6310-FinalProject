@@ -17,7 +17,7 @@ def get_user_demand(user_id=None):
         id_to_check = g.user_id
 
     course_demand = []
-    for c in StudentDemand.query.filter(StudentDemand.student_id == id_to_check).all():
+    for c in StudentDemand.query.filter(StudentDemand.student_id == id_to_check).filter(StudentDemand.is_current == True).all():
         course_demand.append({
             'course': c.course,
             'semester': c.semester,
@@ -31,7 +31,7 @@ def get_user_demand(user_id=None):
 def get_aggregate_demand():
     course_demand = []
     aggregate_sub = db_session.query(StudentDemand.course_id, StudentDemand.semester_id, func.count(StudentDemand.id)
-                                     .label('student_count')).group_by(StudentDemand.course_id)\
+                                     .label('student_count')).filter(StudentDemand.is_current == True).group_by(StudentDemand.course_id)\
                                      .group_by(StudentDemand.semester_id).subquery()
 
     merged_query = db_session.query(Course, Semester, aggregate_sub.c.student_count).select_from(aggregate_sub)\
@@ -52,21 +52,14 @@ def get_aggregate_demand():
 def create_demand():
     j = request.get_json()
 
-    if not StudentDemand.query.filter_by(student_id=g.user_id, semester_id=j['semester_id'], course_id=j['course_id']).first():
+    StudentDemand.query.filter(StudentDemand.student_id == g.user_id).update({StudentDemand.is_current: False})
+
+    for s in j['courses']:
         db_session.add(StudentDemand(student_id=g.user_id,
-                      semester_id=j['semester_id'],
-                      course_id=j['course_id']))
-        db_session.commit()
+                      semester_id=s['semester_id'],
+                      course_id=s['course_id'],
+                      is_current=True))
 
-    return get_user_demand()
-
-@demand_bp.route('/', methods=['DELETE'])
-@requires_authentication()
-def delete_demand():
-    s = StudentDemand.query.filter_by(student_id=g.user_id, semester_id=int(request.args['semester_id']),
-                                      course_id=int(request.args['course_id'])).first()
-
-    db_session.delete(s)
     db_session.commit()
 
     return get_user_demand()
