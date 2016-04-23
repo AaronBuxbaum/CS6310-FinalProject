@@ -7,7 +7,7 @@ angular.module('CS6310', [
   .value('$routerRootComponent', 'main')
 
   .config(function ($mdThemingProvider) {
-    $mdThemingProvider.theme('docs-dark', 'default')
+    $mdThemingProvider.theme('default')
       .primaryPalette('yellow')
       .dark();
   });
