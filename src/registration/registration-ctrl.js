@@ -1,4 +1,4 @@
-angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filter, UserService, CourseService) {
+angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filter, UserService, CourseService, DemandService) {
   var ctrl = this;
 
   if (!UserService.loggedIn) {
@@ -7,11 +7,13 @@ angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filte
 
   CourseService.getAllClasses().then(function (response) {
     console.log(response.data.courses);
-    ctrl.allClasses = response.data.courses[0];
-    ctrl.selectedClasses = _.sampleSize(ctrl.allClasses, 4);
-    ctrl.allClasses.map(function (item, i) {
+    ctrl.allClasses = response.data.courses[0].map(function (item, i) {
       item.image = '//loremflickr.com/50/50?random=' + i;
       return item;
+    });
+    DemandService.getDemand().then(function (response) {
+      var id = response.data.demand[0].course.id;
+      ctrl.selectedClasses = [_.find(ctrl.allClasses, { id: id })];
     });
   });
 
@@ -29,6 +31,6 @@ angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filte
   };
 
   ctrl.submitChanges = function () {
-    return DemandService.submit(ctrl.selectedClasses);
+    return DemandService.submitDemand(ctrl.selectedClasses);
   };
 });
