@@ -58,6 +58,10 @@ class InstructorPool(BaseModel):
     semester_id = Column(Integer, ForeignKey('semester.id', ondelete='cascade'), nullable=False)
     instructor_role = Column(Enum('professor', 'TA', name='instructor_enum'), nullable=False)
 
+    instructor = relationship('User')
+    course = relationship('Course')
+    semester = relationship('Semester')
+
 class StudentRecord(BaseModel):
     user_id = Column(Integer, ForeignKey('user.id', ondelete='cascade'), nullable=False)
     seniority = Column(Integer, nullable=False)
@@ -75,11 +79,19 @@ class StudentDemand(BaseModel):
     created_at = Column(DateTime, default=lambda: arrow.now().datetime)
     is_current = Column(Boolean, default=False)
 
+    student = relationship('User')
+    course = relationship('Course')
+    semester = relationship('Semester')
+
 class StudentAssignment(BaseModel):
     student_id = Column(Integer, ForeignKey('user.id', ondelete='cascade'), nullable=False)
     course_id = Column(Integer, ForeignKey('course.id', ondelete='cascade'), nullable=False)
     semester_id = Column(Integer, ForeignKey('semester.id', ondelete='cascade'), nullable=False)
     run_id = Column(Integer, ForeignKey('optimization_run.id', ondelete='cascade'), nullable=False)
+
+    student = relationship('User')
+    course = relationship('Course')
+    semester = relationship('Semester')
 
 class InstructorAssignment(BaseModel):
     instructor_id = Column(Integer, ForeignKey('user.id', ondelete='cascade'), nullable=False)

@@ -1,7 +1,8 @@
 import hashlib
-from werkzeug.exceptions import Unauthorized
+from werkzeug.exceptions import Unauthorized, NotFound
 from flask import Blueprint, jsonify, request, session
 
+from api.utils import requires_authentication
 from api.models import db_session, User
 from api.schemas import UserSchema
 
@@ -10,15 +11,15 @@ user_bp = Blueprint('user', __name__, url_prefix='/api/user')
 # TODO: Testing only, should connect to external user authentication system
 @user_bp.route('/', methods=['POST'])
 def create_user():
-    user_data = UserSchema().load(request.get_json()).data
-    u = User(first_name=user_data['first_name'],
-             last_name=user_data['last_name'],
-             username=user_data['username'],
-             role=user_data['role'])
+    j = request.get_json()
+    u = User(first_name=j['first_name'],
+             last_name=j['last_name'],
+             username=j['username'],
+             role=j['role'])
 
     # Hash password
     # This is not a secure way at all to do this...
-    u.password_hash = hashlib.sha256(user_data['password'].encode()).hexdigest()
+    u.password_hash = hashlib.sha256(j['password'].encode()).hexdigest()
 
     db_session.add(u)
     db_session.commit()
@@ -33,6 +34,7 @@ def delete_user(user_id):
     return jsonify(deleted=True)
 
 @user_bp.route('/', methods=['GET'])
+@requires_authentication()
 def get_current_user():
     u = User.query.get(session['user_id'])
     if not u:
@@ -47,9 +49,9 @@ def get_user(user_id):
 
 @user_bp.route('/login', methods=['POST'])
 def login_user():
-    r = request.get_json()
-    u = User.query.filter(User.username == r.get('username'))\
-        .filter(User.password_hash == hashlib.sha256(r.get('password').encode()).hexdigest()).first()
+    j = request.get_json()
+    u = User.query.filter(User.username == j['username'])\
+        .filter(User.password_hash == hashlib.sha256(j['password'].encode()).hexdigest()).first()
 
     if not u:
         raise Unauthorized('Not allowed to access this site.')
@@ -61,4 +63,4 @@ def login_user():
 @user_bp.route('/logout', methods=['POST'])
 def logout_user():
     session.pop('user_id')
-    return jsonify(deleted=True)
+    return jsonify(success=True)
