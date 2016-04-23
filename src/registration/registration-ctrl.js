@@ -1,5 +1,9 @@
-angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filter) {
+angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filter, UserService) {
   var ctrl = this;
+
+  if (!UserService.loggedIn) {
+    ctrl.$router.navigate(['Log In']);
+  }
 
   //EXAMPLE DATA
   ctrl.allClasses = [
