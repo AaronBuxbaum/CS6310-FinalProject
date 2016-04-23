@@ -12,5 +12,12 @@ angular.module('CS6310').factory('UserService', function ($http) {
     });
   };
 
+  svc.logOut = function () {
+    return $http.post(url + 'logout').then(function (response) {
+      svc.loggedIn = null;
+      return svc.loggedIn;
+    });
+  }
+
   return svc;
 });

@@ -1,3 +1,3 @@
-angular.module('CS6310').controller('FooterCtrl', function ($rootRouter) {
+angular.module('CS6310').controller('FooterCtrl', function () {
     var ctrl = this;
 });
