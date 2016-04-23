@@ -1,86 +1,117 @@
+import sys
+import json
+from collections import defaultdict
 from gurobipy import Model, LinExpr, GRB, GurobiError
 
-from loader import SolverData
+class Solver(object):
+    """Encapsulation for the Gurobi solver."""
 
-s = SolverData('resources/static', 'resources/large/large10000.csv')
+    def __init__(self, json_data):
+        self.m = Model('mip1.log')
+        self.solution_matrix = None
+        
+        # Load from JSON
+        self.all_data = json_data
+        self.student_ids = [int(k) for k in json_data['students'].keys()]
+        self.course_ids = [int(k) for k in json_data['courses'].keys()]
+        self.semester_ids = [int(k) for k in json_data['semesters'].keys()]
+        self.dependencies = [(d['first_course'], d['second_course']) for d in json_data['course_dependencies']]
 
-m = Model('mip1.log')
+        self.student_demand = defaultdict(lambda: False)
+        for sd in json_data['student_demand']:
+            self.student_demand[sd['student_id'], sd['course_id'], sd['semester_id']] = True
 
-# Create model variables
-max_class_size = m.addVar(lb=0.0, ub=GRB.INFINITY, vtype=GRB.INTEGER, name='max_class_size')
-solution_matrix = {(st, c, se): m.addVar(vtype=GRB.BINARY, name='{}_{}_{}'.format(st, c, se))
-                   for st in s.student_ids for c in s.course_ids for se in s.semester_ids}
 
-m.update()
+    def construct_model(self):
+        self.m = Model('mip1.log')
 
-# Constraint #1: Class availability and size
-for course in s.course_ids:
-    for semester in s.semester_ids:
-        class_size_expr = LinExpr()
+        # Create model variables
+        max_class_size = self.m.addVar(lb=0.0, ub=GRB.INFINITY, vtype=GRB.INTEGER, name='max_class_size')
+        self.solution_matrix = {(st, c, se): self.m.addVar(vtype=GRB.BINARY, name='{}_{}_{}'.format(st, c, se))
+                           for st in self.student_ids for c in self.course_ids for se in self.semester_ids}
 
-        for student in s.student_ids:
-            class_size_expr.add(solution_matrix[student, course, semester])
+        self.m.update()
 
-        if not s.is_course_offered(course, semester):
-            m.addConstr(class_size_expr, GRB.EQUAL, 0, 'max_size_{}_{}'.format(course, semester))
-        else:
-            m.addConstr(class_size_expr, GRB.LESS_EQUAL, max_class_size, 'max_size_{}_{}'.format(course, semester))
+        # Constraint #1: Class availability and size
+        for course in self.course_ids:
+            for semester in self.semester_ids:
+                class_size_expr = LinExpr()
 
-# Constraint #2: No classes with pre-requisites in first semester
-for student in s.student_ids:
-    for prereq in s.dependencies:
-        first_semester_prereq_expr = LinExpr()
-        first_semester_prereq_expr.add(solution_matrix[student, prereq[1], 1])
-        m.addConstr(first_semester_prereq_expr, GRB.EQUAL, 0, 'fs_prereq_{}_{}'.format(student, prereq))
+                for student in self.student_ids:
+                    class_size_expr.add(self.solution_matrix[student, course, semester])
 
-# Constraint #3: Max course load per student per semester
-for student in s.student_ids:
-    for semester in s.semester_ids:
-        max_load_expr = LinExpr()
+                if not self.is_course_offered(course, semester):
+                    self.m.addConstr(class_size_expr, GRB.EQUAL, 0, 'max_size_{}_{}'.format(course, semester))
+                else:
+                    self.m.addConstr(class_size_expr, GRB.LESS_EQUAL, max_class_size, 'max_size_{}_{}'.format(course, semester))
 
-        for course in s.course_ids:
-            max_load_expr.add(solution_matrix[student, course, semester])
+        # Constraint #2: No classes with pre-requisites in first semester
+        for student in self.student_ids:
+            for prereq in self.dependencies:
+                first_semester_prereq_expr = LinExpr()
+                first_semester_prereq_expr.add(self.solution_matrix[student, prereq[1], 1])
+                self.m.addConstr(first_semester_prereq_expr, GRB.EQUAL, 0, 'fs_prereq_{}_{}'.format(student, prereq))
 
-        m.addConstr(max_load_expr, GRB.LESS_EQUAL, 2, 'max_load_{}_{}'.format(student, semester))
+        # Constraint #3: Max course load per student per semester
+        for student in self.student_ids:
+            for semester in self.semester_ids:
+                max_load_expr = LinExpr()
 
-# Constraint #4: Course demand for student
-for student in s.student_ids:
-    for course in s.course_ids:
+                for course in self.course_ids:
+                    max_load_expr.add(self.solution_matrix[student, course, semester])
 
-        if any([s.student_demand[student, course, semester] for semester in s.semester_ids]):
-            demand_expr = LinExpr()
-            for semester in s.semester_ids:
-                demand_expr.add(solution_matrix[student, course, semester])
+                self.m.addConstr(max_load_expr, GRB.LESS_EQUAL, 2, 'max_load_{}_{}'.format(student, semester))
 
-            m.addConstr(demand_expr, GRB.EQUAL, 1, 'student_demand_{}_{}'.format(student, course))
+        # Constraint #4: Course demand for student
+        for student in self.student_ids:
+            for course in self.course_ids:
 
-# Constraint #5: Prerequisite courses
-for student in s.student_ids:
-    for prereq in s.dependencies:
-        prereq_expr = LinExpr()
+                if any([self.student_demand[student, course, semester] for semester in self.semester_ids]):
+                    demand_expr = LinExpr()
+                    for semester in self.semester_ids:
+                        demand_expr.add(self.solution_matrix[student, course, semester])
 
-        for semester in s.semester_ids[:-1]:
-            prereq_expr.add(solution_matrix[student, prereq[0], semester], 1.0)
-            prereq_expr.add(solution_matrix[student, prereq[1], semester + 1], -1.0)
+                    self.m.addConstr(demand_expr, GRB.EQUAL, 1, 'student_demand_{}_{}'.format(student, course))
 
-        m.addConstr(prereq_expr, GRB.GREATER_EQUAL, 0, 'prereq_{}_{}_{}'.format(student, prereq[0], prereq[1]))
+        # Constraint #5: Prerequisite courses
+        for student in self.student_ids:
+            for prereq in self.dependencies:
+                prereq_expr = LinExpr()
 
-# Create the objective
-objective_expr = LinExpr()
-objective_expr.add(max_class_size)
-m.setObjective(objective_expr, GRB.MINIMIZE)
+                for semester in sorted(self.semester_ids)[:-1]:
+                    prereq_expr.add(self.solution_matrix[student, prereq[0], semester], 1.0)
+                    prereq_expr.add(self.solution_matrix[student, prereq[1], semester + 1], -1.0)
 
-m.optimize()
+                self.m.addConstr(prereq_expr, GRB.GREATER_EQUAL, 0, 'prereq_{}_{}_{}'.format(student, prereq[0], prereq[1]))
 
-# Print objective value
-print(m.objVal)
+        # Create the objective
+        objective_expr = LinExpr()
+        objective_expr.add(max_class_size)
+        self.m.setObjective(objective_expr, GRB.MINIMIZE)
 
-# Print debug solution
-course_semester_totals = {}
-for course in s.course_ids:
-    schedule = 'C{:2d}  '.format(course)
-    for semester in s.semester_ids:
-        schedule += '{:3d}  '.format(int(sum([solution_matrix[student, course, semester].x
-                                    for student in s.student_ids])))
+    def optimize_model(self):
+        self.m.optimize()
+        return self.m.objVal
 
-    print(schedule)
+    def print_debug_matrix(self):
+        for course in self.course_ids:
+            schedule = 'C{:2d}  '.format(course)
+            for semester in self.semester_ids:
+                schedule += '{:3d}  '.format(int(sum([self.solution_matrix[student, course, semester].x
+                                            for student in self.student_ids])))
+
+            print(schedule)
+
+    def is_course_offered(self, course_id, semester_id):
+        c = self.all_data['courses'][str(course_id)]
+        s = self.all_data['semesters'][str(semester_id)]['semester_name'].lower()
+
+        return ('fall' in s and c['is_fall']) or ('summer' in s and c['is_summer']) or ('spring' in s and c['is_spring'])
+
+
+if __name__ == '__main__':
+    with open(sys.argv[1], 'rU') as json_file:
+        solver = Solver(json.load(json_file))
+        solver.construct_model()
+        print(solver.optimize_model())
+        solver.print_debug_matrix()
