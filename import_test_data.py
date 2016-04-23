@@ -18,8 +18,8 @@ BaseModel.metadata.create_all(bind=engine)
 with open('optimizer/resources/small/users_10.csv', 'rU') as user_file:
     user_reader = csv.DictReader(user_file)
     for u in user_reader:
-        db_user = User(first_name=string.capitalize(u['first_name']),
-                       last_name=string.capitalize(u['last_name']),
+        db_user = User(first_name=u['first_name'].capitalize(),
+                       last_name=u['last_name'].capitalize(),
                        username=u['username'].lower(),
                        password_hash=hashlib.sha256(u['username'].lower().encode()).hexdigest(),
                        role=user_roles[u['role_ID']])
