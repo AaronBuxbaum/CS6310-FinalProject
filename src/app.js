@@ -4,4 +4,10 @@ angular.module('CS6310', [
   'ngComponentRouter'
 ])
 
-  .value('$routerRootComponent', 'main');
+  .value('$routerRootComponent', 'main')
+
+  .config(function ($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+      .primaryPalette('yellow')
+      .dark();
+  });
