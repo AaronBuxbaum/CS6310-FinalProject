@@ -1,23 +1,27 @@
-<md-content class="registration md-padding autocomplete" layout="column">
-    <md-contact-chips ng-model="$ctrl.selectedClasses" filter-selected="true" md-contacts="$ctrl.querySearch($query)" md-contact-name="title"
-        md-contact-image="image" md-contact-email="number" md-require-match="true" md-highlight-flags="i" placeholder="Select a class..."
-        secondary-placeholder="Select more classes...">
-    </md-contact-chips>
+<md-content class="registration md-padding autocomplete">
+    <md-content ng-if="$ctrl.selectedClasses" layout="column">
+        <md-contact-chips ng-model="$ctrl.selectedClasses" filter-selected="true" md-contacts="$ctrl.querySearch($query)" md-contact-name="course_name"
+            md-contact-image="image" md-contact-email="course_number" md-require-match="true" md-highlight-flags="i" placeholder="Select a class..."
+            secondary-placeholder="Select more classes...">
+        </md-contact-chips>
 
-    <md-list>
-        <md-subheader class="md-no-sticky">Recommended Classes</md-subheader>
-        <class-item ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses | filter: {recommended: true}"
-            ng-if="$ctrl.isSelected(class)">
-        </class-item>
-        <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: true}" class="selected"></class-item>
-    </md-list>
+        <md-list>
+            <md-subheader class="md-no-sticky">Recommended Classes</md-subheader>
+            <class-item ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses | filter: {recommended: true}"
+                ng-if="$ctrl.isSelected(class)">
+            </class-item>
+            <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: true}" class="selected"></class-item>
+        </md-list>
 
-    <md-list>
-        <md-subheader class="md-no-sticky">All Classes</md-subheader>
-        <class-item ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses | filter: {recommended: '!'}"
-            ng-if="$ctrl.isSelected(class)"></class-item>
-        <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: '!'}" class="selected"></class-item>
-    </md-list>
+        <md-list>
+            <md-subheader class="md-no-sticky">All Classes</md-subheader>
+            <class-item ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses | filter: {recommended: '!'}"
+                ng-if="$ctrl.isSelected(class)"></class-item>
+            <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: '!'}" class="selected"></class-item>
+        </md-list>
 
-    <md-button ng-click="$ctrl.submitChanges()" class="md-raised md-primary" style="margin-top: 30px;">Submit Changes</md-button>
+        <md-button ng-click="$ctrl.submitChanges()" class="md-raised md-primary" style="margin-top: 30px;">Submit Changes</md-button>
+    </md-content>
+
+    <md-progress-circular md-mode="indeterminate" ng-if="!$ctrl.selectedClasses"></md-progress-circular>
 </md-content>

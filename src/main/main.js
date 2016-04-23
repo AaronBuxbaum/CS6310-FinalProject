@@ -3,14 +3,19 @@ angular.module('CS6310').component('main', {
   $routeConfig: [
     {
       path: '/login',
-      name: 'TODO',
+      name: 'Log In',
       component: 'login',
       useAsDefault: true
     },
     {
-      path: '/student/:id',
-      name: 'Student',
+      path: '/registration/:id',
+      name: 'Student Registration',
       component: 'registration'
+    },
+    {
+      path: '/admincp/:id',
+      name: 'Admin Control Panel',
+      component: 'admin'
     },
     {
       path: '/aboutUs',
