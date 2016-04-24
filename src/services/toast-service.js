@@ -1,12 +1,11 @@
 angular.module('CS6310').factory('ToastService', function ($mdToast) {
   var svc = {};
 
-  svc.showToast = function (text, action, position) {
+  svc.showToast = function (text, action) {
     var toast = $mdToast.simple()
       .textContent(text)
       .action(action || 'OK')
       .highlightAction(true)
-      .position(position);
     return $mdToast.show(toast);
   };
 
