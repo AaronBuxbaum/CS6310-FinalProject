@@ -1,10 +1,20 @@
-angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filter, UserService, CourseService, DemandService) {
+angular.module('CS6310').controller('RegistrationCtrl', function (
+  $scope,
+  $filter,
+  UserService,
+  CourseService,
+  DemandService,
+  SolverService,
+  ToastService
+) {
   var ctrl = this;
   ctrl.selectedClasses = [];
 
-  ctrl.$routerCanActivate = function () {
-    return UserService.getUser().then(function (user) {
-      return user.data.role === 'student';
+  ctrl.$routerOnActivate = function () {
+    UserService.getUser().then(function (user) {
+      if (user.data.role !== 'student') {
+        ctrl.$router.navigate(['Log In']);
+      }
     });
   };
 
@@ -23,7 +33,6 @@ angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filte
     });
   });
 
-  //Actual Functionality
   ctrl.querySearch = function (query) {
     return $filter('filter')(ctrl.allClasses, query);
   };
@@ -37,6 +46,12 @@ angular.module('CS6310').controller('RegistrationCtrl', function ($scope, $filte
   };
 
   ctrl.submitChanges = function () {
-    return DemandService.submitDemand(ctrl.selectedClasses);
+    return DemandService.submitDemand(ctrl.selectedClasses)
+      .then(function () {
+        return SolverService.optimize();
+      })
+      .then(function () {
+        return ToastService.showToast('Class Registration completed!');
+      });
   };
 });
