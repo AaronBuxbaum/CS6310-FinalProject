@@ -1,11 +1,14 @@
 
 angular.module('CS6310').controller('AdminCtrl', function ($scope, $filter, UserService, CourseService, DemandService) {
-    var ctrl = this;
+  var ctrl = this;
 
-  if (!UserService.loggedIn) {
-    //this.router  = new router();
-    ctrl.$router.navigate(['Log In']);
-  }
+  ctrl.$routerOnActivate = function () {
+    UserService.getUser().then(function (user) {
+      if (user.data.role !== 'administrator') {
+        ctrl.$router.navigate(['Log In']);
+      }
+    });
+  };
 
   CourseService.getAllClasses().then(function (response) {
     console.log(response.data.courses);
