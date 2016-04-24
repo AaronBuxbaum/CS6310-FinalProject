@@ -1,4 +1,4 @@
-<md-content md-padding>
+<md-content md-padding layout="column">
     <md-grid-list md-cols="1" md-cols-sm="2" md-cols-md="3" md-cols-gt-md="6" md-row-height-gt-md="1:1" md-row-height="5:3" md-gutter="8px"
         md-gutter-gt-sm="4px" style="margin: 8px;">
         <md-grid-tile ng-repeat="developer in ::$ctrl.developers" ng-style="{'background-image': 'url(' + developer.image + ')'}"
@@ -16,4 +16,8 @@
             </a>
         </md-grid-tile>
     </md-grid-list>
+
+    <md-subheader md-padding>
+        This project is open sourced under the MIT license. It is available via GitHub.
+    </md-subheader>
 </md-content>
