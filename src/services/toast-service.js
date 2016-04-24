@@ -1,4 +1,4 @@
-angular.module('CS6310').factory('ToastService', function ($toast) {
+angular.module('CS6310').factory('ToastService', function ($mdToast) {
   var svc = {};
 
   svc.showToast = function (text, action, position) {
