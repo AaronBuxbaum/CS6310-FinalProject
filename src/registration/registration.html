@@ -1,32 +1,26 @@
 <md-content class="registration md-padding autocomplete">
-    <md-content ng-if="$ctrl.selectedClasses" layout="column">
-        <md-contact-chips ng-model="$ctrl.selectedClasses" filter-selected="true" md-contacts="$ctrl.querySearch($query)" md-contact-name="course_name"
-            md-contact-image="image" md-contact-email="course_number" md-require-match="true" md-highlight-flags="i" placeholder="Select a class..."
+    <md-content ng-if="$ctrl.schedule">
+        <md-subheader>Schedule</md-subheader>
+        <md-tabs md-dynamic-height md-border-bottom>
+            <md-tab ng-repeat="semester in $ctrl.schedule" label="{{semester.name}}">
+                <md-list layout="column" layout-gt-xs="row">
+                    <class-item flex-gt-xs width-percent="100" ng-model="course" ng-repeat="course in semester.courses"></class-item>
+                </md-list>
+            </md-tab>
+        </md-tabs>
+    </md-content>
+
+    <md-divider></md-divider>
+
+    <md-content ng-if="$ctrl.selectedClasses" layout="column" style="margin-top: 30px;">
+        <md-contact-chips ng-model="$ctrl.selectedClasses" filter-selected="true" md-contacts="$ctrl.querySearch($query)" md-contact-name="course_name" md-contact-email="course_number" md-require-match="true" md-highlight-flags="i" placeholder="Select a class..."
             secondary-placeholder="Select more classes...">
         </md-contact-chips>
 
-        <md-content ng-if="$ctrl.schedule">
-            <md-subheader>Schedule</md-subheader>
-            <md-tabs md-dynamic-height md-border-bottom>
-                <md-tab ng-repeat="semester in $ctrl.schedule" label="{{semester.name}}">
-                    <md-list flex>
-                        <md-subheader class="md-no-sticky">{{semester.name}}</md-subheader>
-                        <md-list-item class="md-3-line" ng-repeat="course in semester.courses">
-                            <div class="md-list-item-text" layout="column">
-                                <h3>{{course.course_name}}</h3>
-                                <h4>{{course.course_number}}</h4>
-                            </div>
-                        </md-list-item>
-                        <md-divider ng-if="!$last"></md-divider>
-                    </md-list>
-                </md-tab>
-            </md-tabs>
-        </md-content>
-
         <md-list>
             <md-subheader>All Classes</md-subheader>
-            <class-item ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses" ng-if="$ctrl.isSelected(class)"></class-item>
-            <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses" class="selected"></class-item>
+            <class-item width-percent="33" ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses" ng-if="$ctrl.isSelected(class)"></class-item>
+            <class-item width-percent="33" ng-model="class" ng-repeat="class in $ctrl.selectedClasses" class="selected"></class-item>
         </md-list>
 
         <md-button ng-click="$ctrl.submitChanges()" class="md-raised md-primary" style="margin-top: 30px;">Submit Changes</md-button>

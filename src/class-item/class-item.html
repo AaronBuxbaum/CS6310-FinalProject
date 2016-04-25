@@ -1,5 +1,4 @@
-<md-list-item class="md-2-line contact-item">
-    <img ng-src="{{$ctrl.ngModel.image}}" class="md-avatar" alt="{{$ctrl.ngModel.course_name}}" />
+<md-list-item class="md-2-line contact-item" ng-style="{'width': $ctrl.widthPercent + '%'}">
     <div class="md-list-item-text compact">
         <h3>{{$ctrl.ngModel.course_name}}</h3>
         <p>{{$ctrl.getFullClassName($ctrl.ngModel)}}</p>

@@ -19,8 +19,7 @@
   white-space: nowrap;
   overflow: hidden; }
 .registration .contact-item {
-  float: left;
-  width: 33%; }
+  float: left; }
 .registration md-contact-chips {
   margin-bottom: 10px; }
 .registration .md-chips {

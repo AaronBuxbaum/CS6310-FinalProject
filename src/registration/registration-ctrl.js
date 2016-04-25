@@ -18,15 +18,8 @@ angular.module('CS6310').controller('RegistrationCtrl', function (
     });
   };
 
-  CourseService.getSchedule().then(function (response) {
-    ctrl.schedule = response.data;
-  });
-
   CourseService.getAllClasses().then(function (response) {
-    ctrl.allClasses = response.data.courses[0].map(function (item, i) {
-      item.image = '//loremflickr.com/50/50?random=' + i;
-      return item;
-    });
+    ctrl.allClasses = response.data.courses[0];
 
     DemandService.getDemand().then(function (response) {
       response.data.demand.map(function (item) {
@@ -49,13 +42,19 @@ angular.module('CS6310').controller('RegistrationCtrl', function (
     return ctrl.selectedClasses.indexOf(item) < 0;
   };
 
+  ctrl.setSchedule = function () {
+    CourseService.getSchedule().then(function (response) {
+      ctrl.schedule = response.data.schedule;
+    });
+  };
+  ctrl.setSchedule();
+
   ctrl.submitChanges = function () {
     return DemandService.submitDemand(ctrl.selectedClasses)
-      .then(function () {
-        return SolverService.optimize();
-      })
+      .then(SolverService.optimize)
       .then(function () {
         return ToastService.showToast('Class Registration completed!');
-      });
+      })
+      .then(ctrl.setSchedule);
   };
 });
