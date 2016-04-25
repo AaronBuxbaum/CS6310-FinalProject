@@ -26,7 +26,7 @@ def get_user_schedule(user_id=None):
         if c.semester.id not in semester_contents.keys():
             semester_contents[c.semester.id] = (c.semester, [c.course])
         else:
-            semester_contents[c.c.semester.id][1].append(c.course)
+            semester_contents[c.semester.id][1].append(c.course)
 
     semester_array = []
     for s in semester_contents.keys():
