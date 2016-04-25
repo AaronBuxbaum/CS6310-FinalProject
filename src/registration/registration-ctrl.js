@@ -18,6 +18,10 @@ angular.module('CS6310').controller('RegistrationCtrl', function (
     });
   };
 
+  CourseService.getSchedule().then(function (response) {
+    ctrl.schedule = response.data;
+  });
+
   CourseService.getAllClasses().then(function (response) {
     ctrl.allClasses = response.data.courses[0].map(function (item, i) {
       item.image = '//loremflickr.com/50/50?random=' + i;
