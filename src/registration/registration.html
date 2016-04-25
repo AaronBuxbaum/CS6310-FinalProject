@@ -5,19 +5,28 @@
             secondary-placeholder="Select more classes...">
         </md-contact-chips>
 
-        <md-list>
-            <md-subheader class="md-no-sticky">Recommended Classes</md-subheader>
-            <class-item ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses | filter: {recommended: true}"
-                ng-if="$ctrl.isSelected(class)">
-            </class-item>
-            <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: true}" class="selected"></class-item>
-        </md-list>
+        <md-content ng-if="$ctrl.schedule">
+            <md-subheader>Schedule</md-subheader>
+            <md-tabs md-dynamic-height md-border-bottom>
+                <md-tab ng-repeat="semester in $ctrl.schedule" label="{{semester.name}}">
+                    <md-list flex>
+                        <md-subheader class="md-no-sticky">{{semester.name}}</md-subheader>
+                        <md-list-item class="md-3-line" ng-repeat="course in semester.courses">
+                            <div class="md-list-item-text" layout="column">
+                                <h3>{{course.course_name}}</h3>
+                                <h4>{{course.course_number}}</h4>
+                            </div>
+                        </md-list-item>
+                        <md-divider ng-if="!$last"></md-divider>
+                    </md-list>
+                </md-tab>
+            </md-tabs>
+        </md-content>
 
         <md-list>
-            <md-subheader class="md-no-sticky">All Classes</md-subheader>
-            <class-item ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses | filter: {recommended: '!'}"
-                ng-if="$ctrl.isSelected(class)"></class-item>
-            <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses | filter: {recommended: '!'}" class="selected"></class-item>
+            <md-subheader>All Classes</md-subheader>
+            <class-item ng-model="class" ng-click="$ctrl.selectClass(class)" ng-repeat="class in $ctrl.allClasses" ng-if="$ctrl.isSelected(class)"></class-item>
+            <class-item ng-model="class" ng-repeat="class in $ctrl.selectedClasses" class="selected"></class-item>
         </md-list>
 
         <md-button ng-click="$ctrl.submitChanges()" class="md-raised md-primary" style="margin-top: 30px;">Submit Changes</md-button>
