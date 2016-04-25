@@ -1,1 +1,1 @@
-web: uwsgi --http 0.0.0.0:$PORT --module api --callable app
+web: uwsgi --http 0.0.0.0:$PORT --module api --callable flask_app
